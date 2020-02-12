@@ -6,21 +6,21 @@
 
 // CLIENT to connect to attacker's listening "SERVER"
 
-#define USAGE                                                                                               \
-    "usage:\n"                                                                                              \
-    "  reverse_tcp [options]\n"                                                                             \
-    "options:\n"                                                                                            \
-    "  -s                  The host you want your target machine to connect to (Default: localhost\n"       \
-    "  -p                  The port you want your target machine to connect to (Default: 4444)\n"           \
-    "  -h                  Show this help message\n"
+#define USAGE                                                                                      \
+    "usage:\n"                                                                                     \
+    "  reverse_tcp [options]\n"                                                                    \
+    "options:\n"                                                                                   \
+    "  -s         The host you want your target machine to connect to (Default: localhost\n"       \
+    "  -p         The port you want your target machine to connect to (Default: 4444)\n"           \
+    "  -h         Show this help message\n"
 
 /* STRUCT FOR OPTIONS ==================================================== */
 // https://stackoverflow.com/questions/9642732/parsing-command-line-arguments-in-c
-const struct switches options[] = {
-    {"LHOST", required_argument, NULL, 's'},
-    {"LPORT", required_argument, NULL, 'p'},
-    {"help", no_argument, NULL, 'h'},
-    {NULL, 0, NULL, 0}};
+// static struct switches options[] = {
+//     {"LHOST", required_argument, NULL, 's'},
+//     {"LPORT", required_argument, NULL, 'p'},
+//     {"help", no_argument, NULL, 'h'},
+//     {NULL, 0, NULL, 0}};
 
 /* MAIN ================================================================== */
 int main(int argc, char **argv) {
@@ -31,7 +31,8 @@ int main(int argc, char **argv) {
 
     // parse and set command line arguments
     // https://www.geeksforgeeks.org/getopt-function-in-c-to-parse-command-line-arguments/
-    while ((opt = getopt_long(argc, argv, "s:p:hx", options, NULL)) != -1) {
+    // https://www.gnu.org/software/libc/manual/html_node/Example-of-Getopt.html
+    while ((opt = getopt(argc, argv, "s:p:h:")) != -1) {
         switch (opt) {
             case 's': //server
                 lhost = optarg;
@@ -48,6 +49,8 @@ int main(int argc, char **argv) {
                 break;
         }
     }
+    //printf("lhost: %s\n", lhost); // test print [validated]
+    //printf("port: %d\n", lport); // test print [validated]
 
     if (NULL == lhost) {
         fprintf(stderr, "%s @ %d: invalid lhost\n", __FILE__, __LINE__);
@@ -61,6 +64,11 @@ int main(int argc, char **argv) {
     }
 
     /* SOCKET CODE ======================================================= */
+    // create socket
+
+
+    // connect to the listening server
+
 
 
 

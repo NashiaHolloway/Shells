@@ -1,3 +1,0 @@
-
-
-static struct switches options[];

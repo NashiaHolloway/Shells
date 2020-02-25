@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <string.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 
 // CLIENT to connect to attacker's listening "SERVER"
 
